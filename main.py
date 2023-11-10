@@ -6,21 +6,55 @@ import wandb
 from glob import glob
 import os
 from torch.utils.data import Dataset, DataLoader
+import logging
+import sys
 
 from models import get_model
 from dataloader import get_loaders
+from trainer import train, test
 
+DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+logger = logging.getLogger(__name__)
 
 def main(configs):
 
+    logger.info("*** data loading ***")
+    
     train_loader , val_loader, test_loader = get_loaders(configs)
+    
+    logger.info(f"Train dataloader size: {len(train_loader)}")
+    logger.info(f"Validation datalodaer size: {len(val_loader)}")
+    logger.info(f"Test datalodaer size: {len(test_loader)}")
 
-    model = get_model(configs)
 
+    logger.info("*** model loading***")
+    
+    init_params = {
+        "encoder_name": configs.encoder_name, 
+        "encoder_weights": configs.encoder_weights, 
+        "classes": configs.classes, 
+        "activation": configs.activation
+    } 
+    model = get_model(configs, architecture=configs.architecture, init_params=init_params)    
+    model.to(DEVICE)
+    
+    if configs.IS_TRAIN:
+        logger.info("*** train start ***")
+        train(configs, model, train_loader, val_loader)
+    
+    if configs.IS_TEST:
+        logger.info("*** inference start ***")
+        test(configs, model, test_loader)
+    
 
 if __name__=="__main__":
-    
+
     configs = {
+        "IS_TRAIN" : True,
+        "IS_TEST" : False,
+        "SAVE_MODEL" : True,
+        
+        'SAVE_DIR' : './predicted_masks',
         'DATA_PATH' : '/content/datasets',
         'VALI_SIZE' : 0.2,
         "SEED" : 42,
@@ -28,7 +62,31 @@ if __name__=="__main__":
         "NUM_WORKERS" : 2,
         
         "batch_size" : 8,
-        "train_transform" : "base_transform"
+        "train_transform" : "base_transform",
+
+        "encoder_name": 'resnext50', 
+        "encoder_weights": 'imagenet', 
+        "classes": 13, 
+        "activation": "softmax",
+        "architecture": 'unet'
     }
+
+    wandb.init(
+            project="UNITON_segmentation",
+            config=configs
+    )
+
+    class CONFIGS:
+        """
+        DICT 변수를 configs.LR 등의 방법으로 접근하기 위함
+        """
+        def __init__(self):
+            self.configs = configs
+        def __getattr__(self, name):
+            if name in self.configs:
+                return self.configs[name]
+            else:
+                raise AttributeError(f"'CONFIGS' object has no attribute '{name}'")
+    cfg = CONFIGS()
     
-    main(configs)
+    main(cfg)
