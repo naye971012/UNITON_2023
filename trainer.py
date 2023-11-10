@@ -53,6 +53,13 @@ def train(configs, model, train_lodaer, vali_loader):
                               'mIOU': epoch_iou / (i+1) })
             tbar.update()
             
+            if((i+1)%5==0):
+                wandb.log(
+                    {"train_loss": epoch_loss / (i+1),
+                     "train_mIOU": epoch_iou / (i+1)}
+                )
+            
+            
         validation(configs, model, vali_loader)
 
 
@@ -99,11 +106,18 @@ def validation(configs,model, vali_lodaer):
     # 평균 IoU 출력
     for class_idx, mean_iou in enumerate(mean_class_iou):
         print(f'Mean IoU for Class {class_idx}: {mean_iou}')
+        wandb.log(
+            { f"validation_class-{class_idx}_mIOU" : mean_iou }
+            )
     # 평균 acc 출력
-    for class_idx, mean_acc in enumerate(mean_class_acc):
-        print(f'Mean ACC for Class {class_idx}: {mean_acc}')
+    #for class_idx, mean_acc in enumerate(mean_class_acc):
+    #    print(f'Mean ACC for Class {class_idx}: {mean_acc}')
     print("\n")
 
+    wandb.log(
+        {'validation_loss': epoch_loss / (i+1),
+         'validation_mIOU': epoch_iou / (i+1)}
+    )
 
 def test(configs, model, test_loader):
 

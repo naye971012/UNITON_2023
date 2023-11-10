@@ -76,11 +76,13 @@ if __name__=="__main__":
         "activation": None,
         "architecture": 'Unet'
     }
+    name = f"{configs['encoder_name']}-{configs['architecture']}-{configs['train_transform']}"
 
-    #wandb.init(
-    #        project="UNITON_segmentation",
-    #        config=configs
-    #)
+    wandb.init(
+            project="UNITON_segmentation",
+            name=name,
+            config=configs
+    )
 
     class CONFIGS:
         """
