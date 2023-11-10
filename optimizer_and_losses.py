@@ -27,7 +27,7 @@ def get_loss(name: str):
 
     return criterion
 
-# Dice Loss 구현
+# Dice Loss 구현 #현재 오류
 class DiceLoss(nn.Module):
     def __init__(self, smooth=1.0):
         super(DiceLoss, self).__init__()
@@ -42,7 +42,7 @@ class DiceLoss(nn.Module):
 
         return dice_loss
 
-# Focal Loss 구현
+# Focal Loss 구현 #현재 오류
 class FocalLoss(nn.Module):
     def __init__(self, gamma=2.0, alpha=0.25):
         super(FocalLoss, self).__init__()
