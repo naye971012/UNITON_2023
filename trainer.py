@@ -24,7 +24,8 @@ def train(configs, model, train_lodaer, vali_loader):
         epoch_loss = 0.0
         epoch_iou = 0.0
         
-        for i, batch in enumerate(tqdm(train_lodaer, position=0, desc=f"epoch {epoch}")):
+        tbar = tqdm(enumerate(train_lodaer), total=len(train_lodaer), position=0, desc=f"epoch {epoch}")
+        for i, batch in tbar:
             images, masks = batch
             
             images = images.float().to(DEVICE)
@@ -48,9 +49,10 @@ def train(configs, model, train_lodaer, vali_loader):
             mIOU = calculate_miou(iou_per_class)
             epoch_iou += mIOU
             
-            tqdm.set_postfix({'Loss': epoch_loss / (i+1),
+            tbar.set_postfix({'Loss': epoch_loss / (i+1),
                               'mIOU': epoch_iou / (i+1) })
-
+            tbar.update()
+            
         validation(configs, model, vali_loader)
 
 
@@ -66,7 +68,8 @@ def validation(configs,model, vali_lodaer):
         class_iou_values = []
         class_acc_values = []
         
-        for i, batch in enumerate(tqdm(vali_lodaer, position=0, desc=f"validation epoch")):
+        tbar = tqdm(enumerate(vali_lodaer), total=len(vali_lodaer), position=0, desc="validation epoch")
+        for i, batch in tbar:
             images, masks = batch
             
             images = images.float().to(DEVICE)
@@ -86,8 +89,9 @@ def validation(configs,model, vali_lodaer):
             mIOU = calculate_miou(iou_per_class)
             epoch_iou += mIOU
             
-            tqdm.set_postfix({'Loss': epoch_loss / (i+1),
+            tbar.set_postfix({'Loss': epoch_loss / (i+1),
                               'mIOU': epoch_iou / (i+1) })
+            tbar.update()
 
     # 전체 validation 데이터에 대한 클래스별 IoU를 평균냄
     mean_class_iou = torch.mean(torch.tensor(class_iou_values), dim=0).tolist()
