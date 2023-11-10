@@ -49,7 +49,7 @@ def main(configs):
 
 if __name__=="__main__":
 
-    configs = {
+    configs = { 
         "IS_TRAIN" : True,
         "IS_TEST" : False,
         "SAVE_MODEL" : True,
@@ -66,8 +66,8 @@ if __name__=="__main__":
         "accumulation_step" : 2,
         "train_transform" : "base_transform",
 
-        "optimizer" : "AdamW",
-        "loss" : "CE",
+        "optimizer" : "adamw", #(optimizer in torch.optim.*)
+        "loss" : "focal",
         "lr" : 0.001,
         
         "encoder_name": 'resnext50', 
