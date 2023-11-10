@@ -1,0 +1,1 @@
+segmentation 대회 기본 틀
