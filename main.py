@@ -61,9 +61,15 @@ if __name__=="__main__":
         "RESIZE" : (512,512),
         "NUM_WORKERS" : 2,
         
+        "epoch" : 5,
         "batch_size" : 8,
+        "accumulation_step" : 2,
         "train_transform" : "base_transform",
 
+        "optimizer" : "AdamW",
+        "loss" : "CE",
+        "lr" : 0.001,
+        
         "encoder_name": 'resnext50', 
         "encoder_weights": 'imagenet', 
         "classes": 13, 
