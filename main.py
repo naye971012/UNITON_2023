@@ -55,14 +55,14 @@ if __name__=="__main__":
         "SAVE_MODEL" : True,
         
         'SAVE_DIR' : './predicted_masks',
-        'DATA_PATH' : 'segmentation_basis/data',
+        'DATA_PATH' : '/content/segmentation_basis/data',
         'VALI_SIZE' : 0.2,
         "SEED" : 42,
-        "RESIZE" : (224,224),
+        "RESIZE" : (512,512),
         "NUM_WORKERS" : 1,
         
-        "epoch" : 5,
-        "batch_size" : 2,
+        "epoch" : 20,
+        "batch_size" : 12,
         "accumulation_step" : 2,
         "train_transform" : "base_transform",
 
@@ -70,11 +70,11 @@ if __name__=="__main__":
         "loss" : "focal",
         "lr" : 0.001,
         
-        "encoder_name": 'resnet50', 
+        "encoder_name": 'resnet101', 
         "encoder_weights": 'imagenet', 
-        "classes": 10, 
+        "classes": 10,
         "activation": None,
-        "architecture": 'Unet'
+        "architecture": 'DeepLabV3Plus'
     }
     name = f"{configs['encoder_name']}-{configs['architecture']}-{configs['train_transform']}"
 
