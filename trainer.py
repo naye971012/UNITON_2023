@@ -139,6 +139,7 @@ def test(configs, model, test_loader):
     # 테스트를 수행합니다.
     model.eval()
     with torch.no_grad():
+        x=0
         for i, images in enumerate(tqdm(test_loader, position=0, leave=True, desc='Prediction')):
 
             # 가져온 데이터를 장치에 할당합니다.
@@ -157,7 +158,8 @@ def test(configs, model, test_loader):
                 # 파일 이름에서 인덱스를 추출합니다.
 
                 # 이미지를 저장합니다. 파일 이름을 추출된 인덱스로 설정합니다.
-                pred_mask_image.save(os.path.join(save_directory, f"test_{str(i).zfill(4)}.png"))
+                pred_mask_image.save(os.path.join(save_directory, f"test_{str(x).zfill(4)}.png"))
+                x+=1
 
     pred_files = sorted(glob(f'{save_directory}/*.png'))  # 파일을 숫자 순서대로 정렬합니다.
 

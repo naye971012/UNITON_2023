@@ -44,6 +44,8 @@ def main(configs):
     
     if configs.IS_TEST:
         logger.info("*** inference start ***")
+        
+        model.load_state_dict(torch.load(configs.model_path))
         test(configs, model, test_loader)
     
 
@@ -56,6 +58,7 @@ if __name__=="__main__":
         
         'SAVE_DIR' : './predicted_masks',
         'DATA_PATH' : '/content/segmentation_basis/data',
+        'model_path': None,
         'VALI_SIZE' : 0.2,
         "SEED" : 42,
         "RESIZE" : (512,512),
