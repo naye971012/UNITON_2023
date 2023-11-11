@@ -62,3 +62,25 @@ class transformation_class:
             A.Normalize(),
             ToTensorV2()
         ])
+
+        self.mask_transform = A.Compose([
+
+            A.OneOf([
+                A.HorizontalFlip(p=0.5),  # 수평 뒤집기
+                A.Rotate(limit=10, p=0.5),                   # -10도에서 10도 사이 랜덤 회전
+            ], p=0.75),  # OneOf로 랜덤 선택, p=1.0은 항상 적용하도록 함
+            
+            A.GridDropout(holes_number_x=6, holes_number_y=6, p=0.75),
+
+            A.OneOf([
+                A.RandomCrop(height=334, width=334, p=0.7),  # 무작위 크롭 (정사각형으로 crop)
+                A.RandomCrop(height=384, width=384, p=0.8),  # 무작위 크롭 (정사각형으로 crop)
+                A.RandomCrop(height=448, width=448, p=0.9),  # 무작위 크롭 (정사각형으로 crop)
+                A.RandomCrop(height=496, width=496, p=1),  # 무작위 크롭 (정사각형으로 crop)
+            ], p=0.3),  # OneOf로 랜덤 선택, p=1.0은 항상 적용하도록 함
+            
+            
+            A.Resize(*self.resize),
+            A.Normalize(),
+            ToTensorV2()
+        ])
