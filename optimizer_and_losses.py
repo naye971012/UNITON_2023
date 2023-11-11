@@ -50,9 +50,9 @@ class FocalLoss(nn.Module):
         return focal_loss
 
 def one_hot_encode(target, num_classes):
-    target_one_hot = torch.zeros(target.size(0), num_classes, target.size(1), target.size(2))
+    target_one_hot = torch.zeros(target.size(0), num_classes, target.size(1), target.size(2)).to(DEVICE)
     target_one_hot.scatter_(1, target.unsqueeze(1), 1)
-    return target_one_hot.to(DEVICE)
+    return target_one_hot
 
 def dice_loss(input, target):
     input = torch.softmax(input, dim=1)
