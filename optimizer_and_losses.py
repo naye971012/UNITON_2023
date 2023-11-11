@@ -35,7 +35,7 @@ def get_loss(name: str):
     elif name == "abl_ce_iou":
         criterion = ABL_CE_IOU()
     elif name == "abl_ce_iou_weight": #weight per class ratio
-        criterion = ABL_CE_IOU(weight=torch.Tensor([1, 1.5, 1, 5.0, 2.5, 20.0, 20.0, 4.0, 4.0, 1.0]).to(DEVICE))
+        criterion = ABL_CE_IOU()
     else:
         raise ValueError(f"Unsupported criterion for semantic segmentation: {name}")
 
