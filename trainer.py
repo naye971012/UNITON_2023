@@ -16,7 +16,12 @@ DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 def train(configs, model, train_lodaer, vali_loader):
 
     accumulation_step = configs.accumulation_step
-    optimizer = get_optim(configs.optimizer, model.parameters(), configs.lr)
+    
+    lr = configs.lr
+    if configs.scheduler=="sgdr":
+        lr = 0
+    
+    optimizer = get_optim(configs.optimizer, model.parameters(), lr)
     criterion = get_loss(configs.loss)
     
     if configs.scheduler!=None:
