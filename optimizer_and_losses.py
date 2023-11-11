@@ -22,29 +22,16 @@ def get_loss(name: str):
     if name == "cross_entropy":
         criterion = nn.CrossEntropyLoss()
     elif name == "dice":
-        criterion = DiceLoss()
+        #criterion = DiceLoss()
+        pass
     elif name == "focal":
         criterion = FocalLoss()
+    elif name == "mixed":
+        criterion = MixedLoss()
     else:
         raise ValueError(f"Unsupported criterion for semantic segmentation: {name}")
 
     return criterion
-
-# Dice Loss 구현 #현재 오류
-class DiceLoss(nn.Module):
-    def __init__(self, smooth=1.0):
-        super(DiceLoss, self).__init__()
-        self.smooth = smooth
-
-    def forward(self, logits, targets):
-        intersection = (logits * targets).sum()
-        union = logits.sum() + targets.sum() + self.smooth
-
-        dice_score = (2.0 * intersection + self.smooth) / union
-        dice_loss = 1.0 - dice_score
-
-        return dice_loss
-
 
 class FocalLoss(nn.Module):
     def __init__(self, gamma=2.0, alpha=0.25):
@@ -58,6 +45,41 @@ class FocalLoss(nn.Module):
         focal_loss = self.alpha * (1 - pt) ** self.gamma * cross_entropy
 
         return focal_loss
+
+def one_hot_encode(target, num_classes):
+    target_one_hot = torch.zeros(target.size(0), num_classes, target.size(1), target.size(2))
+    target_one_hot.scatter_(1, target.unsqueeze(1), 1)
+    return target_one_hot
+
+def dice_loss(input, target):
+    input = torch.softmax(input, dim=1)
+    smooth = 1.0
+    iflat = input.view(-1)
+    
+    target_one_hot = one_hot_encode(target, num_classes=input.size(1))
+    tflat = target_one_hot.view(-1)
+    intersection = (iflat * tflat).sum()
+    return ((2.0 * intersection + smooth) / (iflat.sum() + tflat.sum() + smooth))
+
+class MixedLoss(nn.Module):
+    def __init__(self, alpha=10):
+        super().__init__()
+        self.alpha = alpha
+        self.focal = FocalLoss()
+
+    def forward(self, input, target):
+        """
+
+        Args:
+            input (_type_): logit [# of batch, class, 512, 512]
+            target (_type_): [# of batch, 512, 512]
+
+        Returns:
+            _type_: loss
+        """
+        loss = self.alpha*self.focal(input, target) - torch.log(dice_loss(input, target))
+        return loss.mean()
+
 
 def get_scheduler(name:str, optimizer):
     
