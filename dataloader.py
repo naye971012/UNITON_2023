@@ -9,9 +9,9 @@ def get_loaders(configs):
     get train/valid/test loader
     """
     data_directory = configs.DATA_PATH
-    train_image_paths = sorted(glob(os.path.join(data_directory, 'train', 'images', '*.png')))
+    train_image_paths = sorted(glob(os.path.join(data_directory, 'train', 'images', '*.jpg')))
     train_mask_paths = sorted(glob(os.path.join(data_directory, 'train', 'masks', '*.png')))
-    test_image_paths = sorted(glob(os.path.join(data_directory, 'test', 'images', '*.png')))
+    test_image_paths = sorted(glob(os.path.join(data_directory, 'test', 'images', '*.jpg')))
 
     train_image_paths, val_image_paths, train_mask_paths, val_mask_paths = train_test_split(train_image_paths, 
                                                                                             train_mask_paths, 
