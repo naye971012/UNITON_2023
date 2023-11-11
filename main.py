@@ -66,19 +66,19 @@ if __name__=="__main__":
         
         "epoch" : 20,
         "batch_size" : 13,
-        "accumulation_step" : 4,
-        "train_transform" : "base_transform",
+        "accumulation_step" : 2,
+        "train_transform" : "hard_transform",
 
         "scheduler" : "steplr",
         "optimizer" : "adamw", #(optimizer in torch.optim.*)
         "loss" : "focal",
         "lr" : 0.001,
         
-        "encoder_name": 'resnet101', 
+        "encoder_name": 'timm-resnest101e', 
         "encoder_weights": 'imagenet', 
         "classes": 10,
         "activation": None,
-        "architecture": 'DeepLabV3Plus'
+        "architecture": 'MAnet'
     }
     name = f"{configs['encoder_name']}-{configs['architecture']}-{configs['train_transform']}"
 
