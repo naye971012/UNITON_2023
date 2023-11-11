@@ -78,7 +78,9 @@ if __name__=="__main__":
         "encoder_weights": 'imagenet', 
         "classes": 10,
         "activation": None,
-        "architecture": 'MAnet'
+        "architecture": 'MAnet',
+        
+        "tta": True
     }
     name = f"{configs['encoder_name']}-{configs['architecture']}-{configs['train_transform']}-{configs['train_transform']}"
 

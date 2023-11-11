@@ -7,6 +7,7 @@ import numpy as np
 from glob import glob
 import zipfile
 import wandb
+import ttach as tta
 
 from utils import calculate_iou, calculate_miou
 from optimizer_and_losses import get_loss, get_optim, get_scheduler
@@ -130,6 +131,75 @@ def validation(configs,model, vali_lodaer):
     wandb.log(
         {'validation_loss': epoch_loss / (i+1),
          'validation_mIOU': epoch_iou / (i+1)}
+    )
+    
+    if configs.tta:
+        validation_tta(configs,model, vali_lodaer)
+    
+
+def validation_tta(configs,model, vali_lodaer):
+
+    criterion = get_loss(configs.loss)
+    
+    transform = tta.Compose(
+        [
+            tta.HorizontalFlip(),
+            tta.FiveCrops(448,448)
+        ]
+    )
+    
+    tta_model = tta.SegmentationTTAWrapper(model, transform)
+    
+    with torch.no_grad():
+        
+        model.eval()
+        epoch_loss = 0.0
+        epoch_iou = 0.0
+        class_iou_values = []
+        class_acc_values = []
+        
+        tbar = tqdm(enumerate(vali_lodaer), total=len(vali_lodaer), position=0, desc="tta validation epoch")
+        for i, batch in tbar:
+            images, masks = batch
+            
+            images = images.float().to(DEVICE)
+            masks = masks.long().to(DEVICE)
+
+            outputs = tta_model(images)
+            loss = criterion(outputs, masks)
+            
+            epoch_loss += loss.item()
+
+            #save temp iou, acc
+            iou_per_class, acc_per_class = calculate_iou(pred_masks=outputs,
+                                                         true_masks=masks,
+                                                         num_classes=configs.classes)
+            class_iou_values.append(iou_per_class)
+            class_acc_values.append(acc_per_class)
+            mIOU = calculate_miou(iou_per_class)
+            epoch_iou += mIOU
+            
+            tbar.set_postfix({'Loss': epoch_loss / (i+1),
+                              'mIOU': epoch_iou / (i+1) })
+            tbar.update()
+
+    # 전체 validation 데이터에 대한 클래스별 IoU를 평균냄
+    mean_class_iou = torch.mean(torch.tensor(class_iou_values), dim=0).tolist()
+    mean_class_acc = torch.mean(torch.tensor(class_acc_values), dim=0).tolist()
+    # 평균 IoU 출력
+    for class_idx, mean_iou in enumerate(mean_class_iou):
+        print(f'tta Mean IoU for Class {class_idx}: {mean_iou}')
+        #wandb.log(
+        #    { f"tta validation_class-{class_idx}_mIOU" : mean_iou }
+        #    )
+    # 평균 acc 출력
+    #for class_idx, mean_acc in enumerate(mean_class_acc):
+    #    print(f'Mean ACC for Class {class_idx}: {mean_acc}')
+    print("\n")
+
+    wandb.log(
+        {'tta_validation_loss': epoch_loss / (i+1),
+         'tta_validation_mIOU': epoch_iou / (i+1)}
     )
 
 def test(configs, model, test_loader):

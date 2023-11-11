@@ -85,7 +85,9 @@ if __name__=="__main__":
             "encoder_name": {"value": 'resnet50'}, 
             "architecture": {"value": 'Unet'}, 
             "activation": {"value": None},
-            "encoder_weights": {"value": "imagenet"}
+            "encoder_weights": {"value": "imagenet"},
+            
+            "tta": {"value":False}
         },
     }
 
