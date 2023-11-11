@@ -64,9 +64,9 @@ if __name__=="__main__":
         "RESIZE" : (512,512),
         "NUM_WORKERS" : 1,
         
-        "epoch" : 20,
-        "batch_size" : 13,
-        "accumulation_step" : 2,
+        "epoch" : 25,
+        "batch_size" : 8,
+        "accumulation_step" : 4,
         "train_transform" : "hard_transform",
 
         "scheduler" : "steplr",
