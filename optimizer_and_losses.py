@@ -34,6 +34,8 @@ def get_loss(name: str):
         criterion = MixedLoss()
     elif name == "abl_ce_iou":
         criterion = ABL_CE_IOU()
+    elif name == "abl_ce_iou_weight": #weight per class ratio
+        criterion = ABL_CE_IOU(weight=torch.Tensor([1, 1.5, 1, 5.0, 2.5, 20.0, 20.0, 4.0, 4.0, 1.0]))
     else:
         raise ValueError(f"Unsupported criterion for semantic segmentation: {name}")
 
@@ -41,9 +43,11 @@ def get_loss(name: str):
 
 
 class ABL_CE_IOU(nn.Module):
-    def __init__(self):
+    def __init__(self,weight=None, label_smooth=0.2):
         super(ABL_CE_IOU,self).__init__()
-        self.abl_loss = ABL()
+        if weight!=None:
+            label_smooth = 0
+        self.abl_loss = ABL(weight=weight,label_smoothing=label_smooth)
         self.focal_loss = FocalLoss()
     def forward(self,logits, targets):
         x =self.abl_loss.forward(logits, targets) + self.focal_loss.forward(logits, targets) + lovasz_softmax(F.softmax(logits,dim=1),targets)
