@@ -22,7 +22,7 @@ def get_loaders(configs):
     val_dataset = SegDataset(val_image_paths, val_mask_paths, mode='val', resize=configs.RESIZE)
     test_dataset = SegDataset(test_image_paths, mode='test', resize=configs.RESIZE)
 
-    train_loader = DataLoader(train_dataset, batch_size=configs.batch_size , shuffle=True, num_workers=configs.NUM_WORKERS)
+    train_loader = DataLoader(train_dataset, batch_size=configs.batch_size , shuffle=True, num_workers=configs.NUM_WORKERS, drop_last=True)
     val_loader = DataLoader(val_dataset, batch_size=configs.batch_size , shuffle=False, num_workers=configs.NUM_WORKERS)
     test_loader = DataLoader(test_dataset, batch_size=configs.batch_size , shuffle=False, num_workers=configs.NUM_WORKERS)
 

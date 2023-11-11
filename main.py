@@ -65,7 +65,7 @@ if __name__=="__main__":
         "NUM_WORKERS" : 1,
         
         "epoch" : 25,
-        "batch_size" : 8,
+        "batch_size" : 6,
         "accumulation_step" : 4,
         "train_transform" : "hard_transform",
 
