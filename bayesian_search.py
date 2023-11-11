@@ -49,6 +49,8 @@ def main():
         test(configs, model, test_loader)
     
 
+        
+
 class CONFIGS:
     """
     DICT 변수를 configs.LR 등의 방법으로 접근하기 위함

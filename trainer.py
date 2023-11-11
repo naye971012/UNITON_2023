@@ -61,7 +61,10 @@ def train(configs, model, train_lodaer, vali_loader):
             
             
         validation(configs, model, vali_loader)
-
+        
+        if configs.SAVE_MODEL:
+            torch.save(model.state_dict(), f'{configs.encoder_name}_{configs.architecture}_epoch-{epoch}.pth')
+            
 
 def validation(configs,model, vali_lodaer):
 
