@@ -49,8 +49,14 @@ class transformation_class:
             A.RandomGamma(p=0.15),                           # 랜덤 감마 조절
             A.GaussNoise(var_limit=(0.0, 25.0), p=0.15),     # 가우시안 노이즈 추가
             A.Sharpen(p=0.15),                               # 이미지 선명도 조절
+
+            A.OneOf([
+                A.RandomCrop(height=334, width=334, p=0.7),  # 무작위 크롭 (정사각형으로 crop)
+                A.RandomCrop(height=384, width=384, p=0.8),  # 무작위 크롭 (정사각형으로 crop)
+                A.RandomCrop(height=448, width=448, p=0.9),  # 무작위 크롭 (정사각형으로 crop)
+                A.RandomCrop(height=496, width=496, p=1),  # 무작위 크롭 (정사각형으로 crop)
+            ], p=0.3),  # OneOf로 랜덤 선택, p=1.0은 항상 적용하도록 함
             
-            A.RandomCrop(height=(384, 512), width=(384, 512), p=0.5),  # 무작위 크롭 (정사각형으로 crop)
             
             A.Resize(*self.resize),
             A.Normalize(),
