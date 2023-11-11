@@ -28,7 +28,7 @@ def train(configs, model, train_lodaer, vali_loader):
         epoch_iou = 0.0
         
         wandb.log(
-                    {"train_LR": optimizer.get_last_lr()}
+                    {"train_LR": optimizer.param_groups[0]["lr"]}
                 )
         
         tbar = tqdm(enumerate(train_lodaer), total=len(train_lodaer), position=0, desc=f"epoch {epoch}")
