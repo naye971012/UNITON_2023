@@ -32,9 +32,9 @@ def get_loss(name: str):
         criterion = FocalLoss()
     elif name == "mixed":
         criterion = MixedLoss()
-    elif name == "abl_ce_iou":
-        criterion = ABL_CE_IOU()
-    elif name == "abl_ce_iou_weight": #weight per class ratio
+    elif name == "abl_focal_iou":
+        criterion = ABL_FOCAL_IOU()
+    elif name == "abl_ce_iou": #weight per class ratio
         criterion = ABL_CE_IOU()
     else:
         raise ValueError(f"Unsupported criterion for semantic segmentation: {name}")
@@ -42,13 +42,24 @@ def get_loss(name: str):
     return criterion
 
 
+class ABL_FOCAL_IOU(nn.Module):
+    def __init__(self,weight=None, label_smooth=0.2):
+        super(ABL_FOCAL_IOU,self).__init__()
+        if weight!=None:
+            label_smooth = 0
+        self.abl_loss = ABL(weight=weight,label_smoothing=label_smooth)
+        self.focal_loss = FocalLoss()
+    def forward(self,logits, targets):
+        x =self.abl_loss.forward(logits, targets) + self.focal_loss.forward(logits, targets) + lovasz_softmax(F.softmax(logits,dim=1),targets)
+        return x
+
 class ABL_CE_IOU(nn.Module):
     def __init__(self,weight=None, label_smooth=0.2):
         super(ABL_CE_IOU,self).__init__()
         if weight!=None:
             label_smooth = 0
         self.abl_loss = ABL(weight=weight,label_smoothing=label_smooth)
-        self.focal_loss = FocalLoss()
+        self.focal_loss = nn.CrossEntropyLoss()
     def forward(self,logits, targets):
         x =self.abl_loss.forward(logits, targets) + self.focal_loss.forward(logits, targets) + lovasz_softmax(F.softmax(logits,dim=1),targets)
         return x
