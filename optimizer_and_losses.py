@@ -3,6 +3,9 @@ import torch.nn as nn
 import numpy as np
 import torch.optim as optim
 import torch.nn as nn
+from torch.optim import lr_scheduler
+
+from lr_scheduler import *
 
 def get_loss(name: str):
     """
@@ -42,7 +45,7 @@ class DiceLoss(nn.Module):
 
         return dice_loss
 
-# Focal Loss 구현 #현재 오류
+
 class FocalLoss(nn.Module):
     def __init__(self, gamma=2.0, alpha=0.25):
         super(FocalLoss, self).__init__()
@@ -56,7 +59,18 @@ class FocalLoss(nn.Module):
 
         return focal_loss
 
-
+def get_scheduler(name:str, optimizer):
+    
+    name = name.lower()
+    
+    if name == "steplr":
+        scheduler = lr_scheduler.StepLR(optimizer, step_size=3, gamma=0.1)
+    elif name == "reducelronplateau":
+        scheduler = lr_scheduler.ReduceLROnPlateau(optimizer)
+    elif name == "sgdr":
+        scheduler = CosineAnnealingWarmUpRestarts(optimizer)
+        
+    return scheduler
 
 def get_optim(name: str, params, lr):
     """

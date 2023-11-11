@@ -62,8 +62,8 @@ if __name__=="__main__":
         "NUM_WORKERS" : 1,
         
         "epoch" : 20,
-        "batch_size" : 12,
-        "accumulation_step" : 2,
+        "batch_size" : 13,
+        "accumulation_step" : 4,
         "train_transform" : "base_transform",
 
         "optimizer" : "adamw", #(optimizer in torch.optim.*)

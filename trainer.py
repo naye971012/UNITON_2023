@@ -9,7 +9,7 @@ import zipfile
 import wandb
 
 from utils import calculate_iou, calculate_miou
-from optimizer_and_losses import get_loss, get_optim
+from optimizer_and_losses import get_loss, get_optim, get_scheduler
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 def train(configs, model, train_lodaer, vali_loader):
@@ -18,11 +18,18 @@ def train(configs, model, train_lodaer, vali_loader):
     optimizer = get_optim(configs.optimizer, model.parameters(), configs.lr)
     criterion = get_loss(configs.loss)
     
+    if configs.scheduler!=None:
+        optimizer = get_scheduler(configs.scheduler, optimizer)
+    
     for epoch in range(configs.epoch):
         
         model.train()
         epoch_loss = 0.0
         epoch_iou = 0.0
+        
+        wandb.log(
+                    {"train_LR": optimizer.get_last_lr()}
+                )
         
         tbar = tqdm(enumerate(train_lodaer), total=len(train_lodaer), position=0, desc=f"epoch {epoch}")
         for i, batch in tbar:
