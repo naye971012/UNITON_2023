@@ -41,13 +41,13 @@ def get_loss(name: str):
 
 
 class ABL_CE_IOU(nn.Module):
-    def __ini__(self):
+    def __init__(self):
+        super(ABL_CE_IOU,self).__init__()
         self.abl_loss = ABL()
         self.focal_loss = FocalLoss()
     def forward(self,logits, targets):
-        return self.abl_loss(logits, targets) + \
-               self.focal_loss(logits, targets) + \
-               lovasz_softmax(F.softmax(logits,dim=1),targets)
+        x =self.abl_loss.forward(logits, targets) + self.focal_loss.forward(logits, targets) + lovasz_softmax(F.softmax(logits,dim=1),targets)
+        return x
 
 class FocalLoss(nn.Module):
     def __init__(self, gamma=2.0, alpha=0.25):
