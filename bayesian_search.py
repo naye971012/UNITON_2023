@@ -80,6 +80,7 @@ if __name__=="__main__":
             "optimizer": {"values": ['sgd', 'adamw']},
             "loss": {"value": 'cross_entropy'},
             "lr": {"max": 1e-2, "min": 1e-4},
+            "scheduler" : {"values": ["steplr", None] },
             
             "encoder_name": {"value": 'resnet50'}, 
             "architecture": {"value": 'Unet'}, 
