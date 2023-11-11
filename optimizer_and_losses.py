@@ -7,6 +7,9 @@ from torch.optim import lr_scheduler
 
 from lr_scheduler import *
 
+DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+
 def get_loss(name: str):
     """
     지정된 loss 이름에 해당하는 PyTorch loss 함수를 반환합니다.
@@ -49,7 +52,7 @@ class FocalLoss(nn.Module):
 def one_hot_encode(target, num_classes):
     target_one_hot = torch.zeros(target.size(0), num_classes, target.size(1), target.size(2))
     target_one_hot.scatter_(1, target.unsqueeze(1), 1)
-    return target_one_hot
+    return target_one_hot.to(DEVICE)
 
 def dice_loss(input, target):
     input = torch.softmax(input, dim=1)
