@@ -64,11 +64,25 @@ def get_scheduler(name:str, optimizer):
     name = name.lower()
     
     if name == "steplr":
-        scheduler = lr_scheduler.StepLR(optimizer, step_size=3, gamma=0.1)
+        scheduler = lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.75)
     elif name == "reducelronplateau":
         scheduler = lr_scheduler.ReduceLROnPlateau(optimizer)
     elif name == "sgdr":
-        scheduler = CosineAnnealingWarmUpRestarts(optimizer)
+        """
+        먼저 warm up을 위하여 optimizer에 입력되는 learning rate = 0 또는 0에 가까운 아주 작은 값을 입력합니다.
+        위 코드의 스케쥴러에서는 T_0, T_mult, eta_max 외에 T_up, gamma 값을 가집니다.
+        T_0, T_mult의 사용법은 pytorch 공식 CosineAnnealingWarmUpRestarts와 동일합니다. 
+        T_0는 최초 주기값 입니다. T_mult는 주기가 반복되면서 최초 주기값에 비해 얼만큼 주기를 늘려나갈 것인지 스케일 값에 해당합니다
+        eta_max는 learning rate의 최댓값을 뜻합니다. 
+        T_up은 Warm up 시 필요한 epoch 수를 지정하며 일반적으로 짧은 epoch 수를 지정합니다.
+        gamma는 주기가 반복될수록 eta_max 곱해지는 스케일값 입니다
+        """
+        scheduler = CosineAnnealingWarmUpRestarts(optimizer,
+                                                  T_0=10,
+                                                  T_mult=2,
+                                                  eta_max=0.1, 
+                                                  T_up=10, 
+                                                  gamma=0.5)
         
     return scheduler
 

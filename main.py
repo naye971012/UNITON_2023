@@ -66,6 +66,7 @@ if __name__=="__main__":
         "accumulation_step" : 4,
         "train_transform" : "base_transform",
 
+        "scheduler" : "steplr",
         "optimizer" : "adamw", #(optimizer in torch.optim.*)
         "loss" : "focal",
         "lr" : 0.001,
