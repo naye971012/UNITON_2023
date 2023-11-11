@@ -19,7 +19,7 @@ def train(configs, model, train_lodaer, vali_loader):
     criterion = get_loss(configs.loss)
     
     if configs.scheduler!=None:
-        optimizer = get_scheduler(configs.scheduler, optimizer)
+        scheduler = get_scheduler(configs.scheduler, optimizer)
     
     for epoch in range(configs.epoch):
         
@@ -68,6 +68,9 @@ def train(configs, model, train_lodaer, vali_loader):
             
             
         validation(configs, model, vali_loader)
+        
+        if configs.scheduler!=None:
+            scheduler.step()
         
         if configs.SAVE_MODEL:
             torch.save(model.state_dict(), f'{configs.encoder_name}_{configs.architecture}_epoch-{epoch}.pth')
