@@ -80,7 +80,7 @@ if __name__=="__main__":
         "activation": None,
         "architecture": 'MAnet'
     }
-    name = f"{configs['encoder_name']}-{configs['architecture']}-{configs['train_transform']}"
+    name = f"{configs['encoder_name']}-{configs['architecture']}-{configs['train_transform']}-{configs['train_transform']}"
 
     wandb.init(
             project="UNITON_segmentation",
