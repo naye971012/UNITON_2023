@@ -6,6 +6,7 @@ import torch.nn as nn
 from torch.optim import lr_scheduler
 
 from lr_scheduler import *
+from lovasz_losses import lovasz_softmax
 
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -31,12 +32,22 @@ def get_loss(name: str):
         criterion = FocalLoss()
     elif name == "mixed":
         criterion = MixedLoss()
-    elif name == "abl":
-        criterion = ABL()
+    elif name == "abl_ce_iou":
+        criterion = ABL_CE_IOU()
     else:
         raise ValueError(f"Unsupported criterion for semantic segmentation: {name}")
 
     return criterion
+
+
+class ABL_CE_IOU(nn.Module):
+    def __ini__(self):
+        self.abl_loss = ABL()
+        self.focal_loss = FocalLoss()
+    def forward(self,logits, targets):
+        return self.abl_loss(logits, targets) + \
+               self.focal_loss(logits, targets) + \
+               lovasz_softmax(F.softmax(logits,dim=1),targets)
 
 class FocalLoss(nn.Module):
     def __init__(self, gamma=2.0, alpha=0.25):
