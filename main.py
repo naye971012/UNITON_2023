@@ -82,7 +82,7 @@ if __name__=="__main__":
         
         "tta": True
     }
-    name = f"{configs['encoder_name']}-{configs['architecture']}-{configs['train_transform']}-{configs['train_transform']}"
+    name = f"{configs['encoder_name']}-{configs['architecture']}-{configs['train_transform']}-{configs['loss']}"
 
     wandb.init(
             project="UNITON_segmentation",
