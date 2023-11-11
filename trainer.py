@@ -166,9 +166,6 @@ def validation_tta(configs,model, vali_lodaer):
             masks = masks.long().to(DEVICE)
 
             outputs = tta_model(images)
-            loss = criterion(outputs, masks)
-            
-            epoch_loss += loss.item()
 
             #save temp iou, acc
             iou_per_class, acc_per_class = calculate_iou(pred_masks=outputs,

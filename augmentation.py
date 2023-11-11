@@ -67,7 +67,6 @@ class transformation_class:
         ])
 
         self.hard_transform_plus = A.Compose([
-            A.Resize(*self.resize),
             
             A.OneOf([
                 A.HorizontalFlip(p=0.5),  # 수평 뒤집기
@@ -82,14 +81,14 @@ class transformation_class:
             A.Sharpen(p=0.15),                               # 이미지 선명도 조절
             
             A.OneOf([
+                A.augmentations.crops.transforms.CropNonEmptyMaskIfExists(height=384,width=384, ignore_values=[0,1,2,3,4,7,8,9],p=1),
                 A.RandomCrop(height=334, width=334, p=0.7),  # 무작위 크롭 (정사각형으로 crop)
                 A.RandomCrop(height=384, width=384, p=0.8),  # 무작위 크롭 (정사각형으로 crop)
                 A.RandomCrop(height=448, width=448, p=0.9),  # 무작위 크롭 (정사각형으로 crop)
                 A.RandomCrop(height=496, width=496, p=1),  # 무작위 크롭 (정사각형으로 crop)
             ], p=0.3),  # OneOf로 랜덤 선택, p=1.0은 항상 적용하도록 함
-            
-            A.augmentations.crops.transforms.CropNonEmptyMaskIfExists(height=384,width=384, ignore_values=[0,1,2,3,4,7,8,9],p=0.3),
-            
+          
+            A.Resize(*self.resize),
             A.Normalize(),
             ToTensorV2()
         ])
