@@ -11,7 +11,7 @@ import sys
 
 from models import get_model
 from dataloader import get_loaders
-from trainer import train, test
+from trainer import train, test, test_tta
 
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 logger = logging.getLogger(__name__)
@@ -46,8 +46,10 @@ def main(configs):
         logger.info("*** inference start ***")
         
         model.load_state_dict(torch.load(configs.model_path))
-        test(configs, model, test_loader)
-    
+        if configs.tta:
+            test_tta(configs, model, test_loader)
+        else:
+            test(configs,model,test_loader)
 
 if __name__=="__main__":
 
