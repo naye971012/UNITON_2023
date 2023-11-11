@@ -73,7 +73,7 @@ def train(configs, model, train_lodaer, vali_loader):
         if configs.scheduler!=None:
             scheduler.step()
         
-        if configs.SAVE_MODEL:
+        if configs.SAVE_MODEL and epoch%13==11: #save 11, 24
             torch.save(model.state_dict(), f'{configs.encoder_name}_{configs.architecture}_epoch-{epoch}.pth')
             
 
@@ -144,8 +144,6 @@ def validation_tta(configs,model, vali_lodaer):
     transform = tta.Compose(
         [
             tta.HorizontalFlip(),
-            tta.Add([5,-5]),
-            tta.Multiply([0.9,1.1])
         ]
     )
     
@@ -205,8 +203,6 @@ def test_tta(configs, model, test_loader):
     transform = tta.Compose(
         [
             tta.HorizontalFlip(),
-            tta.Add([5,-5]),
-            tta.Multiply([0.9,1.1])
         ]
     )
     tta_model = tta.SegmentationTTAWrapper(model, transform)

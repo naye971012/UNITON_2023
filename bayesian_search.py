@@ -70,24 +70,24 @@ if __name__=="__main__":
     sweep_configuration = {
         "method": "random", #random or bayes
         "name": "sweep",
-        "metric": {"goal": "maximize", "name": "validation_mIOU"},
+        "metric": {"goal": "maximize", "name": "tta_validation_mIOU"},
         "parameters": {
-            "epoch": {"value": 2},
-            "batch_size": {"values": [2, 3, 4]},
+            "epoch": {"value": 25},
+            "batch_size": {"value": 13},
             "accumulation_step": {"values": [1,2,4,8]},
-            "train_transform": {"values": ['base_transform','test_transform']},
+            "train_transform": {"values": ['hard_transform']},
     
-            "optimizer": {"values": ['sgd', 'adamw']},
-            "loss": {"value": 'cross_entropy'},
+            "optimizer": {"values": ['sgd', 'adamw','adam','adagrad']},
+            "loss": {"value": 'mixed'},
             "lr": {"max": 1e-2, "min": 1e-4},
-            "scheduler" : {"values": ["steplr", None] },
+            "scheduler" : {"values": ["steplr", "reducelronplateau", "sgdr"] },
             
-            "encoder_name": {"value": 'resnet50'}, 
-            "architecture": {"value": 'Unet'}, 
+            "encoder_name": {"value": 'resnet101'}, 
+            "architecture": {"value": 'DeepLabV3Plus'}, 
             "activation": {"value": None},
             "encoder_weights": {"value": "imagenet"},
             
-            "tta": {"value":False}
+            "tta": {"value":True}
         },
     }
 
@@ -103,8 +103,8 @@ if __name__=="__main__":
         'DATA_PATH' : 'segmentation_basis/data',
         'VALI_SIZE' : 0.2,
         "SEED" : 42,
-        "RESIZE" : (224,224),
-        "NUM_WORKERS" : 1,
+        "RESIZE" : (512,512),
+        "NUM_WORKERS" : 8,
         
         "classes": 10
     }
