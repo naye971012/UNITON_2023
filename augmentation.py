@@ -11,7 +11,8 @@ class transformation_class:
         
         self.str2transform = {
         "test_transform" : self.test_transform,
-        "base_transform" : self.base_transform
+        "base_transform" : self.base_transform,
+        "hard_transform" : self.hard_transform
         }
             
     def __call__(self, name:str):
