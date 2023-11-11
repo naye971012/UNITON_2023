@@ -67,20 +67,20 @@ if __name__=="__main__":
         "NUM_WORKERS" : 1,
         
         "epoch" : 25,
-        "batch_size" : 6,
+        "batch_size" : 13,
         "accumulation_step" : 4,
-        "train_transform" : "hard_transform",
+        "train_transform" : "hard_transform_plus",
 
         "scheduler" : "steplr",
         "optimizer" : "adamw", #(optimizer in torch.optim.*)
-        "loss" : "focal",
+        "loss" : "mixed",
         "lr" : 0.001,
         
-        "encoder_name": 'timm-resnest101e', 
+        "encoder_name": 'resnet101', 
         "encoder_weights": 'imagenet', 
         "classes": 10,
         "activation": None,
-        "architecture": 'MAnet',
+        "architecture": 'DeepLabV3Plus',
         
         "tta": True
     }

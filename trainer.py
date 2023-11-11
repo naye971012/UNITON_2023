@@ -144,7 +144,8 @@ def validation_tta(configs,model, vali_lodaer):
     transform = tta.Compose(
         [
             tta.HorizontalFlip(),
-            tta.FiveCrops(448,448)
+            tta.Add([5,-5]),
+            tta.Multiply([0.9,1.1])
         ]
     )
     
@@ -204,7 +205,8 @@ def test_tta(configs, model, test_loader):
     transform = tta.Compose(
         [
             tta.HorizontalFlip(),
-            tta.FiveCrops(448,448)
+            tta.Add([5,-5]),
+            tta.Multiply([0.9,1.1])
         ]
     )
     tta_model = tta.SegmentationTTAWrapper(model, transform)
