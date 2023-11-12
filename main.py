@@ -55,12 +55,12 @@ if __name__=="__main__":
 
     configs = { 
         "IS_TRAIN" : True,
-        "IS_TEST" : False,
+        "IS_TEST" : False, #if True, specify your best model path
         "SAVE_MODEL" : True,
         
         'SAVE_DIR' : './predicted_masks',
-        'DATA_PATH' : '/content/segmentation_basis/data',
-        'model_path': None,
+        'DATA_PATH' : '/content/segmentation_basis/data', #in data, there should be train/test folder
+        'model_path': None, #your best model path (pth file)
         'VALI_SIZE' : 0.2,
         "SEED" : 42,
         "RESIZE" : (512,512),
@@ -69,7 +69,7 @@ if __name__=="__main__":
         "epoch" : 25,
         "batch_size" : 13,
         "accumulation_step" : 4,
-        "train_transform" : "hard_transform_plus",
+        "train_transform" : "hard_transform",
 
         "scheduler" : "steplr",
         "optimizer" : "adamw", #(optimizer in torch.optim.*)
@@ -82,7 +82,7 @@ if __name__=="__main__":
         "activation": None,
         "architecture": 'DeepLabV3Plus',
         
-        "tta": True
+        "tta": False
     }
     name = f"{configs['encoder_name']}-{configs['architecture']}-{configs['train_transform']}-{configs['loss']}"
 
