@@ -7,12 +7,12 @@ import torch.nn.functional as F
 
 from scipy.ndimage import distance_transform_edt as distance
 # can find here: https://github.com/CoinCheung/pytorch-loss/blob/af876e43218694dc8599cc4711d9a5c5e043b1b2/label_smooth.py
-from label_smooth import LabelSmoothSoftmaxCEV1 as LSSCE
+from .label_smooth import LabelSmoothSoftmaxCEV1 as LSSCE
 from torchvision import transforms
 from functools import partial
 from operator import itemgetter
 
-from lovasz_losses import lovasz_softmax
+from .lovasz_losses import lovasz_softmax
 
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 

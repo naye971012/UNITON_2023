@@ -1,6 +1,6 @@
 from glob import glob
 import os
-from dataset import SegDataset
+from .dataset import SegDataset
 from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
 

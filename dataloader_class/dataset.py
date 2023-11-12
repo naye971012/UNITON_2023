@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 
-from augmentation import transformation_class
+from .augmentation import transformation_class
 
 class SegDataset(Dataset):
     def __init__(self, image_paths,

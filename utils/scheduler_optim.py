@@ -5,7 +5,7 @@ import torch.optim as optim
 import torch.nn as nn
 from torch.optim import lr_scheduler
 
-from lr_scheduler import *
+from .lr_scheduler import *
 
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
