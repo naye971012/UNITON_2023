@@ -35,6 +35,7 @@ class transformation_class:
 
         self.base_transform = A.Compose([
                     A.Resize(*self.resize),
+                    A.HorizontalFlip(p=0.5),
                     A.Normalize(),
                     ToTensorV2()
         ])
@@ -144,3 +145,8 @@ class transformation_class:
             A.Normalize(),
             ToTensorV2()
         ])
+        
+        
+if True:
+    
+    A.augmentations.crops.transforms.CropNonEmptyMaskIfExists(height=384,width=384, ignore_values=[0,1,2,3,4,7,8,9],p=1),

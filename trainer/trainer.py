@@ -9,8 +9,10 @@ import zipfile
 import wandb
 import ttach as tta
 
-from utils import calculate_iou, calculate_miou
-from optimizer_and_losses import get_loss, get_optim, get_scheduler
+from utils.utils import calculate_iou, calculate_miou
+from utils.scheduler_optim import get_optim, get_scheduler
+from losses.losses import get_loss
+
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 def train(configs, model, train_lodaer, vali_loader):

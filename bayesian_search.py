@@ -9,9 +9,9 @@ from torch.utils.data import Dataset, DataLoader
 import logging
 import sys
 
-from models import get_model
-from dataloader import get_loaders
-from trainer import train, test
+from models.models import get_model
+from dataloader_class.dataloader import get_loaders
+from trainer.trainer import train, test
 
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 logger = logging.getLogger(__name__)
