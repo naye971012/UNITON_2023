@@ -1,6 +1,6 @@
 ## Uni-DTHON (유니드톤) 2023 데이터톤 트랙 16팀
 - Semantic Segmentation Task
-- 특별상 수상 (Public Learboard 1st, Final Leaderboard 6st)
+- 특별상 수상 (Public Learboard 1st, Final Leaderboard 6th)
 
 ## Dataset Description
 - Semantic Semgentation of indoor images
